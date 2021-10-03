@@ -50,3 +50,51 @@ def plus (a, b):
 plus(12,"10")
 
 '''
+## 1.9
+# def plus (a, b):
+#     if type(b)  is int or type(b) is float:
+#         return a+b
+#     else:
+#         return None
+
+# print(plus(12,15.5))
+
+## 1.10 
+# def age_check(age):
+#     print(f"you are {age}")
+#     if age<18:
+#         print("you cant drink")
+#     elif age ==18 or age == 19:
+#         print("you are new to this!")
+#     elif age>20 and age <25:
+#         print("you are still kind of young")
+#     else:
+#         print("enjoy your drink")
+# age_check(19)
+
+## 1.11 for loop
+# days = ("Mon","Tue","Wed","Thu","Fri")
+
+# for day in days:
+#     # print(day)
+#     if day is "Wed":
+#         break
+#     else:
+#         print(day)
+# for letter in "nicolas":  ## 문자열도 하나의 시퀀스 
+#     print(letter)
+
+
+## 1. 12  modules
+# import math 
+
+# print(math.ceil(1.2))
+# print(math.fabs(-1.2))
+
+from math import  fsum as sexy_sum
+# print(ceil(1.2))
+print(sexy_sum({1,2,3,4,5,6,7}))
+
+from calculator import plus , minus
+print(plus(1,2))
+print(minus(1,2))
