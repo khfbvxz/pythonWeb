@@ -17,7 +17,6 @@ def extract_indeed_pages():
        
         pages.append(int(link.string)) ## a 태그 안 span안에 있으므로 
 
-
     max_page = pages[-1]
     return max_page
 
@@ -28,10 +27,12 @@ def extract_indeed_jobs(last_page):
     result=requests.get(f"{URL}&start={0*LIMIT}")
     # print(result.status_code) ## 200 이 5개 출력되야함... 
     soup = BeautifulSoup(result.text,"html.parser")
-
-    ## 태그 잘 찾아야함.. 
     results =soup.find_all("div",{"class":"jobsearch-SerpJobCard"})
     print(results)
-    for result in results:
-        print(result.find("div", {"class":"title"}.string))
+
+    ## 태그 잘 찾아야함.. 
+    # for result in results:
+    #     print(result.find("div", {"class":"title"}.string))
     return jobs
+lsat_page=extract_indeed_pages()
+extract_indeed_jobs(lsat_page)
