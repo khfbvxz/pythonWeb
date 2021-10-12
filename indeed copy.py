@@ -341,3 +341,98 @@ indeed_jobs = extract_indeed_jobs(12)
 print(indeed_jobs)
 
 '''
+
+'''10-11
+indeed.py
+import requests
+from bs4 import BeautifulSoup
+
+## 함수 만들기 
+LIMIT=50
+URL = f"https://www.indeed.com/jobs?q=python&limit={LIMIT}"
+
+def get_last_page():
+  result = requests.get(URL)
+  soup = BeautifulSoup(result.text,"html.parser")
+  pagination = soup.find("div",{"class":"pagination"})  ##  div 만 
+  links = pagination.find_all('a')
+  
+  pages = []
+  for link in links[:-1]:
+      
+      pages.append(int(link.string)) ## a 태그 안 span안에 있으므로 
+
+  max_page = pages[-1]
+  return max_page
+
+def extract_job(html):
+  if html.find("h2",{"class":"jobTitle jobTitle-color-purple jobTitle-newJob"}) is not None:
+    title = html.find("h2",{"class":"jobTitle jobTitle-color-purple jobTitle-newJob"}).find_all("span")
+    title = title[1].text
+    company = html.find("span",{"class":"companyName"})
+    company = str(company.string)
+    company = company.strip()
+    
+  elif html.find("h2",{"class":"jobTitle jobTitle-color-purple"}) is not None:
+    title = html.find("h2",{"class":"jobTitle jobTitle-color-purple"}).find("span").string
+    title = title.text
+    company = html.find("span",{"class":"companyName"})
+    company = str(company.string)
+    company = company.strip()
+
+  location = html.find("div",{"class":"companyLocation"})
+  location = str(location.string)
+  location = location.strip()
+  # print(location)
+
+  return {'title':title , 'company':company , 'location':location}
+  
+
+def extract_jobs(last_page):
+  jobs =[]
+  for page in range(last_page):
+    print(f"Scraping page {page}")
+    result=requests.get(f"{URL}&start={0*50}")
+    # print(result.status_code)
+    soup = BeautifulSoup(result.text,"html.parser")
+    ### 타이틀만 나오게
+    ## new 랑 new 없는거
+    job_seen = soup.find_all("td",{"class":"resultContent"})
+    # job_ids = soup.find("div",{"class":"mosaic mosaic-provider-jobcards mosaic-provider-hydrated"})
+    # if job_ids.find_all("a")['data-jk'] is not None:
+    #   jon = job_ids.find_all("a")['data-jk']
+    #   print(jon)
+    jobs=[]
+    # comp = []
+    cont = 0
+    for job in job_seen:
+
+      job = extract_job(job)
+      jobs.append(job)
+      cont=cont+1
+    # print(job , cont)
+  # for job in job_ids:
+  #   print(job.find("a")["data-sk"])
+  # print(jobs)
+  # print(len(jobs))
+  # print(len(comp))
+  return jobs
+
+def get_jobs():
+  last_pages = get_last_page()  #  5지만 11로 바꿔보자 
+  # jobs = extract_jobs(12) # 라스트 페이지 임의조정함 
+  jobs = extract_jobs(last_pages)
+  return jobs
+  
+  main.py
+
+from indeed import get_jobs as get_indeed_jobs
+import os
+
+
+
+indeed_jobs = get_indeed_jobs()
+print(indeed_jobs)
+
+'''
+
